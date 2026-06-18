@@ -13,11 +13,11 @@ def normalize_answer(text: str) -> str:
 
 def load_dataset(path: str | Path) -> list[QAExample]:
     raw = json.loads(Path(path).read_text(encoding="utf-8"))
-    return [QAExample.model_validate(item) for item in raw]
+    return [QAExample(**item) for item in raw]
 
 def save_jsonl(path: str | Path, records: Iterable[RunRecord]) -> None:
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as f:
         for record in records:
-            f.write(record.model_dump_json() + "\n")
+            f.write(record.json() + "\n")
